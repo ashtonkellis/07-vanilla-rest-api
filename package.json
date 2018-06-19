@@ -23,7 +23,10 @@
     "winston": "^3.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint **/.js",
+    "testWatch": "jest --coverage --watchAll",
+    "test": "eslint . && jest --coverage",
+    "test-nolint": "jest --coverage"
   },
   "repository": {
     "type": "git",

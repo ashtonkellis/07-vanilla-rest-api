@@ -22,7 +22,8 @@ module.exports = function bodyParser(req) {
 
     req.on('end', () => {
       try {
-        // this takes the JSON message and turns it into a JS object, and attaches it as the "body" propery on the bigger request object
+        // this takes the JSON message and turns it into a JS object, and attaches it as the 
+        // "body" propery on the bigger request object
         // possible errors: passing in ' ', usually resuls in a SyntaxError
         req.body = JSON.parse(message);
         return resolve(req);
