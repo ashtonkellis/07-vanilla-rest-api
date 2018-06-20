@@ -48,6 +48,18 @@ const app = http.createServer((req, res) => {
         return undefined;
       }
 
+      if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/api/cowsay') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        const cowsayText = cowsay.say({
+          text: parsedRequest.url.query.text || faker.company.catchPhrase(),
+        });
+        res.write(JSON.stringify({
+          content: cowsayText,
+        }));
+        res.end();
+        return undefined;
+      }
+
       if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/api/cowsayPage') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         const cowsayText = cowsay.say({
@@ -73,12 +85,30 @@ const app = http.createServer((req, res) => {
     .catch((err) => {
       res.writeHead(400, { 'Content-Type': 'text/plain' });
       console.error(err);
-      res.write('BAD REQUEST');
+      res.write('NO MILK FOR YOU!!!');
       res.end();
       return undefined;
     });
 });
 
+server.start = (port, callback) => {
+  return new Promise((resolve, reject) => {
+    try {
+      app.listen(port);
+      return resolve(callback());
+    } catch (err) {
+      return reject(err);
+    }
+  });
+};
 
-server.start = (port, callback) => app.listen(port, callback);
-server.stop = callback => app.close(callback);
+server.stop = (callback) => {
+  return new Promise((resolve, reject) => {
+    try {
+      app.close();
+      return resolve(callback());
+    } catch (err) {
+      return reject(err);
+    }
+  });
+};
